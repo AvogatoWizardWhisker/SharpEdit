@@ -16,7 +16,7 @@ Contributions are welcome! Please open an issue or submit a pull request to help
 
 ## License
 
-This project is licensed under the [MIT license](`LICENSE`).
+This project is licensed under the [MIT license](https://github.com/AvogatoWizardWhisker/SharpEdit?tab=MIT-1-ov-file).
 
 ## Development Status
 
