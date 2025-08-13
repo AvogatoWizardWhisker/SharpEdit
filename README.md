@@ -1,6 +1,6 @@
 # SharpEdit
 
-SharpEdit is a terminal-based text editor written in C#. It is designed to provide a fast, efficient, and user-friendly editing experience directly from the command line.
+SharpEdit is a terminal-based text editor written in C#. It is designed to provide a fast, efficient, and user-friendly editing experience directly from the command line. This project has been inspired by Microsoft's open source repository [edit](https://github.com/microsoft/edit). Go check it out.
 
 ## Features
 
