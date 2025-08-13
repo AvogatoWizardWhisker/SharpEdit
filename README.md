@@ -16,8 +16,8 @@ Contributions are welcome! Please open an issue or submit a pull request to help
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the [MIT license](`LICENSE`).
 
 ## Development Status
 
-SharpEdit is under development. New features and improvements are being added from time to time (as long i'm motivated enough to do so :-) ).
+SharpEdit is under development. New features and improvements are being added from time to time (as long i'm motivated enough to do so :grinning:).
