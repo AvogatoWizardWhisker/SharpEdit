@@ -20,7 +20,7 @@ class Program
 
 class Editor
 {
-    private List<string> _lines = new { "" };
+    private List<string> _lines = new() { "" };
     private int _cursorX = 0;
     private int _cursorY = 0;
     private int _topLine = 0;
@@ -102,7 +102,7 @@ class Editor
         Console.Write(status);
         Console.ResetColor();
 
-        // Place Cursor in visible window
+        // Place cursor in visible window
         int cursorRow = _cursorY - _topLine;
         int cursorCol = Math.Min(_cursorX, Math.Max(0, Console.WindowWidth - 1));
         if (cursorRow >= 0 && cursorRow < height)
