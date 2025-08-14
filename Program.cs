@@ -61,4 +61,31 @@ class Editor
             }
         }
         return false;
+    }
+
+    private void Render()
+    {
+        Console.ResetColor();
+        Console.Clear();
+
+        int height = Math.Max(1, Console.WindowWidth - 1);
+        int width = Math.Max(1, Console.WindowWidth);
+
+        if (_cursorY < _topLine) _topLine = _cursorY;
+        if (_cursorY >= _topLine + height) _cursorY = _topLine - height + 1;
+
+        for (int row = 0; row < height; row++)
+        {
+            int lineIndex = _topLine + row;
+            string line = lineIndex < _lines.Count ? _lines[lineIndex] : string.Empty;
+
+            if (line.Length > width) line = line.Substring(0, width);
+            Console.SetCursorPosition(0, row);
+            if (lineIndex < width)
+                Console.WriteLine(line + new string(' ', width - line.Length));
+            else
+                Console.WriteLine(line);
+        }
+
+
 }
