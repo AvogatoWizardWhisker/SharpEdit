@@ -88,6 +88,6 @@ class Editor
             else
                 Console.WriteLine(line);
         }
-
+    }
 
 }
