@@ -42,7 +42,6 @@ class Editor
         }
     }
 
-
     private bool HandleGlobalCommands(ConsoleKeyInfo key)
     {
         if ((key.Modifiers & ConsoleModifiers.Control) != 0)
@@ -87,6 +86,33 @@ class Editor
                 Console.WriteLine(line + new string(' ', width - line.Length));
             else
                 Console.WriteLine(line);
+        }
+        // Draw status bar
+        Console.BackgroundColor = ConsoleColor.Green;
+        Console.ForegroundColor = ConsoleColor.Black;
+        Console.SetCursorPosition(0, Console.WindowHeight - 1);
+        string name = _filePath is null ? "untitled" : Path.GetFileName(_filePath);
+        string dirty = _dirty ? "*" : "";
+        string pos = $"Ln {_cursorY + 1}, Col {_cursorX + 1}";
+        string status = $"{name}{dirty} | {pos} | Ctrl+S Save Ctrl+O Open Ctrl+Q Quit";
+        if (status.Length < Console.WindowWidth)
+            status += new string(' ', Console.WindowHeight - status.Length);
+        else
+            status = status[..Console.WindowWidth];
+        Console.Write(status);
+        Console.ResetColor();
+
+        // Place Cursor in visible window
+        int cursorRow = _cursorY - _topLine;
+        int cursorCol = Math.Min(_cursorX, Math.Max(0, Console.WindowWidth - 1));
+        if (cursorRow >= 0 && cursorRow < height)
+        {
+            Console.SetCursorPosition(cursorCol, cursorRow);
+            Console.CursorVisible = true;
+        }
+        else
+        {
+            Console.CursorVisible = false;
         }
     }
 
