@@ -29,7 +29,7 @@ class Editor
 
     public void Run()
     {
-        while(true)
+        while (true)
         {
             Render();
             var key = Console.ReadKey(intercept: true);
@@ -38,8 +38,10 @@ class Editor
                 continue;
 
                 HandleEditing(key);
+            }
         }
     }
+
 
     private bool HandleGlobalCommands(ConsoleKeyInfo key)
     {
