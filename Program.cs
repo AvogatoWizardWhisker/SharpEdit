@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Microsoft.VisualBasic.FileIO;
 
 class Program
 {
@@ -115,5 +116,60 @@ class Editor
             Console.CursorVisible = false;
         }
     }
+
+    private void HandEditing(ConsoleKeyInfo key)
+    {
+        switch (key.Key)
+        {
+            case ConsoleKey.LeftArrow:
+                MoveLeft();
+                break;
+            case ConsoleKey.RightArrow:
+                MoveRight();
+                break;
+            case ConsoleKey.UpArrow:
+                MoveUp();
+                break;
+            case ConsoleKey.DownArrow:
+                MoveDown();
+                break;
+            case ConsoleKey.Home:
+                _cursorX = 0;
+                break;
+            case ConsoleKey.End:
+                _cursorX = CurrentLine().Length;
+                break;
+            case ConsoleKey.Enter:
+                InsertNewLine();
+                break;
+            case ConsoleKey.Backspace:
+                Delete();
+                break;
+            case ConsoleKey.Delete:
+                Delete();
+                break;
+            case ConsoleKey.Tab:
+                InsertText("    ");
+                break;
+            default:
+                if (key.KeyChar >= ' ' && !char.IsControl(key.KeyChar))
+                {
+                    InsertText(key.KeyChar.ToString());
+                }
+                break;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
