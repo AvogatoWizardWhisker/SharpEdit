@@ -322,4 +322,29 @@ class Editor
             ShowMessage($"Open failed: {ex.Message}");
         }
     }
+
+    private string Prompt(string message)
+    {
+        //render once to keep things clean
+        Render();
+
+        Console.SetCursorPosition(0, Console.WindowHeight - 1);
+        Console.BackgroundColor = ConsoleColor.DarkCyan;
+        Console.ForegroundColor = ConsoleColor.White;
+        string padded = message;
+        if (padded.Length < Console.WindowWidth)
+            padded += new string(' ', Console.WindowWidth - padded.Length);
+        else
+            padded = padded[..Console.WindowWidth];
+        Console.Write(padded);
+        Console.ResetColor();
+
+        Console.SetCursorPosition(message.Length, Console.WindowHeight - 1);
+        Console.CursorVisible = true;
+
+        Console.ForegroundColor = ConsoleColor.White;
+        var input = ReadLineInline(Console.WindowHeight - message.Length);
+        Console.ResetColor();
+        return input ?? "";
+    }
 }
