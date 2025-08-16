@@ -298,7 +298,7 @@ class Editor
 
     private void Open()
     {
-        var path = Prompt("Open file: ").Trim;
+        var path = Prompt("Open file: ").Trim();
         if (string.IsNullOrEmpty(path)) return;
 
         try
@@ -347,4 +347,6 @@ class Editor
         Console.ResetColor();
         return input ?? "";
     }
+
+
 }
