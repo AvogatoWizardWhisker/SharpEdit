@@ -348,5 +348,23 @@ class Editor
         return input ?? "";
     }
 
+    private void ShowMessage(string message)
+    {
+        Render();
+        Console.SetCursorPosition(0, Console.WindowHeight - 1);
+        Console.BackgroundColor = ConsoleColor.DarkGreen;
+        Console.ForegroundColor = ConsoleColor.Black;
+        string text = " " + message;
+        if (text.Length < Console.WindowWidth)
+            text += new string(' ', Console.WindowHeight - text.Length);
+        else
+            text = text[..Console.WindowWidth];
+        Console.Write(text);
+        Console.ResetColor();
+        
+        //add a pause so the user can see the message
+        System.Threading.Thread.Sleep(1000);
+    }
+
 
 }
