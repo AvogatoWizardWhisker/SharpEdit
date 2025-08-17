@@ -119,7 +119,7 @@ class Editor
         }
     }
 
-    private void HandEditing(ConsoleKeyInfo key)
+    private void HandleEditing(ConsoleKeyInfo key)
     {
         switch (key.Key)
         {
