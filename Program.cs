@@ -390,8 +390,9 @@ class Editor
                 sb.Append(key.KeyChar);
                 Console.Write(key.KeyChar);
             }
-            return sb.ToString();
         }
-        
+        return sb.ToString();
+
+
     }
 }
