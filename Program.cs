@@ -366,5 +366,33 @@ class Editor
         System.Threading.Thread.Sleep(1000);
     }
 
-
+    //minimal inline line editor for prompts
+    private string? ReadLineInline(int maxLen)
+    {
+        var sb = new StringBuilder();
+        while (true)
+        {
+            var key = Console.ReadKey();
+            if (key.Key == ConsoleKey.Enter) break;
+            if (key.Key == ConsoleKey.Escape) return null;
+            if (key.Key == ConsoleKey.Backspace)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Remove(sb.Length - 1, 1);
+                    int left = Console.CursorLeft;
+                    Console.SetCursorPosition(left - 1, Console.CursorTop);
+                    Console.Write(' ');
+                    Console.SetCursorPosition(left - 1, Console.CursorTop);
+                }
+                continue;
+            }
+        }
+        if (!char.IsControl(key.KeyChar) && sb.Length < maxLen)
+        {
+            sb.Append(key.KeyChar);
+            Console.Write(key.KeyChar);
+        }
+        return sb.ToString();
+    }
 }
