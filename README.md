@@ -12,6 +12,15 @@ SharpEdit is a terminal-based text editor written in C#. It is designed to provi
 - Lightweight and easy to install.
 - Keyboard-driven navigation for productivity.
 
+## Getting started
+
+You first need to install an IDE (Integrated Development Environment). Preferably Visual Studio 2022 or Visual Studio Code. You can download them [here](https://visualstudio.microsoft.com/downloads/). You also need to download and install [.NET SDK](https://dotnet.microsoft.com/en-us/download), as well as [git](https://git-scm.com/downloads).
+
+To run the develop this project, follow these steps
+
+- Clone the repository to your prefered directory: `git clone https://github.com/AvogatoWizardWhisker/SharpEdit.git` then open it with `cd SharpEdit`.
+- Build and run the project with the dotnet command `dotnet build && dotnet run`.
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request to help me improve SharpEdit.
