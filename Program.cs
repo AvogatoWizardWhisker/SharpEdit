@@ -89,7 +89,7 @@ class Editor
 
         // Draw status bar
         Console.BackgroundColor = ConsoleColor.DarkGray;
-        Console.ForegroundColor = ConsoleColor.Black;
+        Console.ForegroundColor = ConsoleColor.White;
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
         string name = _filePath is null ? "untitled" : Path.GetFileName(_filePath);
         string dirty = _dirty ? "*" : "";
