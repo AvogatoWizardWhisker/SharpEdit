@@ -74,7 +74,7 @@ class Editor
         int width = Math.Max(1, Console.WindowWidth);
 
         if (_cursorY < _topLine) _topLine = _cursorY;
-        if (_cursorY >= _topLine + height) _cursorY = _topLine - height + 1;
+        if (_cursorY >= _topLine + height) _topLine = _cursorY - height + 1;
 
         for (int row = 0; row < height; row++)
         {
@@ -95,9 +95,9 @@ class Editor
         string name = _filePath is null ? "untitled" : Path.GetFileName(_filePath);
         string dirty = _dirty ? "*" : "";
         string pos = $"Ln {_cursorY + 1}, Col {_cursorX + 1}";
-        string status = $"{name}{dirty} | {pos} | Ctrl+S Save Ctrl+O Open Ctrl+Q Quit";
+        string status = $"{name}{dirty} |  {pos}  | Ctrl+S Save  Ctrl+O Open  Ctrl+Q Quit";
         if (status.Length < Console.WindowWidth)
-            status += new string(' ', Console.WindowHeight - status.Length);
+            status += new string(' ', Console.WindowWidth - status.Length);
         else
             status = status[..Console.WindowWidth];
         Console.Write(status);
