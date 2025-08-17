@@ -1,11 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Microsoft.VisualBasic.FileIO;
-using System.Xml.Serialization;
 
 class Program
 {
@@ -23,9 +20,9 @@ class Program
 class Editor
 {
     private List<string> _lines = new() { "" };
-    private int _cursorX = 0;
-    private int _cursorY = 0;
-    private int _topLine = 0;
+    private int _cursorX = 0; // column in current line
+    private int _cursorY = 0; // line index in buffer
+    private int _topLine = 0; // first visible line index
     private string? _filePath = null;
     private bool _dirty = false;
 
@@ -38,9 +35,8 @@ class Editor
 
             if (HandleGlobalCommands(key))
                 continue;
-            
+
             HandleEditing(key);
-            
         }
     }
 
@@ -70,12 +66,14 @@ class Editor
         Console.ResetColor();
         Console.Clear();
 
-        int height = Math.Max(1, Console.WindowWidth - 1);
+        int height = Math.Max(1, Console.WindowHeight - 1); // keep last line for status
         int width = Math.Max(1, Console.WindowWidth);
 
+        // Adjust scrolling to keep cursor in view
         if (_cursorY < _topLine) _topLine = _cursorY;
         if (_cursorY >= _topLine + height) _topLine = _cursorY - height + 1;
 
+        // Draw text area
         for (int row = 0; row < height; row++)
         {
             int lineIndex = _topLine + row;
@@ -83,11 +81,12 @@ class Editor
 
             if (line.Length > width) line = line.Substring(0, width);
             Console.SetCursorPosition(0, row);
-            if (lineIndex < width)
+            if (line.Length < width)
                 Console.Write(line + new string(' ', width - line.Length));
             else
                 Console.Write(line);
         }
+
         // Draw status bar
         Console.BackgroundColor = ConsoleColor.DarkGray;
         Console.ForegroundColor = ConsoleColor.Black;
@@ -95,7 +94,7 @@ class Editor
         string name = _filePath is null ? "untitled" : Path.GetFileName(_filePath);
         string dirty = _dirty ? "*" : "";
         string pos = $"Ln {_cursorY + 1}, Col {_cursorX + 1}";
-        string status = $"{name}{dirty} |  {pos}  | Ctrl+S Save  Ctrl+O Open  Ctrl+Q Quit";
+        string status = $" {name}{dirty}  |  {pos}  |  Ctrl+S Save  Ctrl+O Open  Ctrl+Q Quit";
         if (status.Length < Console.WindowWidth)
             status += new string(' ', Console.WindowWidth - status.Length);
         else
@@ -152,6 +151,7 @@ class Editor
                 InsertText("    ");
                 break;
             default:
+                // Printable chars
                 if (key.KeyChar >= ' ' && !char.IsControl(key.KeyChar))
                 {
                     InsertText(key.KeyChar.ToString());
@@ -159,6 +159,7 @@ class Editor
                 break;
         }
     }
+
     private string CurrentLine() => _lines[_cursorY];
 
     private void SetCurrentLine(string value)
@@ -181,7 +182,7 @@ class Editor
     {
         var line = CurrentLine();
         if (_cursorX < line.Length) _cursorX++;
-        else if (_cursorX < _lines.Count - 1)
+        else if (_cursorY < _lines.Count - 1)
         {
             _cursorY++;
             _cursorX = 0;
@@ -238,7 +239,7 @@ class Editor
         }
         else if (_cursorY > 0)
         {
-            //merge with previoous line
+            // merge with previous line
             int prevLen = _lines[_cursorY - 1].Length;
             _lines[_cursorY - 1] += CurrentLine();
             _lines.RemoveAt(_cursorY);
@@ -246,7 +247,6 @@ class Editor
             _cursorX = prevLen;
             _dirty = true;
         }
-
     }
 
     private void Delete()
@@ -259,7 +259,7 @@ class Editor
         }
         else if (_cursorY < _lines.Count - 1)
         {
-            //merges with the next line
+            // merge with next line
             _lines[_cursorY] += _lines[_cursorY + 1];
             _lines.RemoveAt(_cursorY + 1);
             _dirty = true;
@@ -268,8 +268,8 @@ class Editor
 
     private bool ConfirmQuit()
     {
-        if (!_dirty) return false;
-        var response = Prompt("Unsaved changes.\nQuit without saving? (y/N): ");
+        if (!_dirty) return true;
+        var response = Prompt("Unsaved changes. Quit without saving? (y/N): ");
         return response.Trim().Equals("y", StringComparison.OrdinalIgnoreCase);
     }
 
@@ -278,7 +278,7 @@ class Editor
         if (string.IsNullOrWhiteSpace(_filePath))
         {
             var path = Prompt("Save as: ").Trim();
-            if (string.IsNullOrEmpty(path)) return;
+            if (string.IsNullOrWhiteSpace(path)) return;
             _filePath = path;
         }
 
@@ -290,14 +290,14 @@ class Editor
         }
         catch (Exception ex)
         {
-            ShowMessage($"Save Failed: {ex.Message}");
+            ShowMessage($"Save failed: {ex.Message}");
         }
     }
 
     private void Open()
     {
         var path = Prompt("Open file: ").Trim();
-        if (string.IsNullOrEmpty(path)) return;
+        if (string.IsNullOrWhiteSpace(path)) return;
 
         try
         {
@@ -308,11 +308,11 @@ class Editor
             if (lines.Count == 0) lines.Add("");
 
             _lines = lines;
-            _dirty = false;
             _cursorX = 0;
             _cursorY = 0;
             _topLine = 0;
             _filePath = path;
+            _dirty = false;
             ShowMessage($"Opened {path}");
         }
         catch (Exception ex)
@@ -323,7 +323,7 @@ class Editor
 
     private string Prompt(string message)
     {
-        //render once to keep things clean
+        // Render once to keep things clean
         Render();
 
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
@@ -341,7 +341,7 @@ class Editor
         Console.CursorVisible = true;
 
         Console.ForegroundColor = ConsoleColor.White;
-        var input = ReadLineInline(Console.WindowHeight - message.Length);
+        var input = ReadLineInline(Console.WindowWidth - message.Length);
         Console.ResetColor();
         return input ?? "";
     }
@@ -354,17 +354,16 @@ class Editor
         Console.ForegroundColor = ConsoleColor.Black;
         string text = " " + message;
         if (text.Length < Console.WindowWidth)
-            text += new string(' ', Console.WindowHeight - text.Length);
+            text += new string(' ', Console.WindowWidth - text.Length);
         else
             text = text[..Console.WindowWidth];
         Console.Write(text);
         Console.ResetColor();
-        
-        //add a pause so the user can see the message
-        System.Threading.Thread.Sleep(1000);
+        // Brief pause so the user can see it
+        System.Threading.Thread.Sleep(750);
     }
 
-    //minimal inline line editor for prompts
+    // Minimal inline line editor for prompts
     private string? ReadLineInline(int maxLen)
     {
         var sb = new StringBuilder();
@@ -392,7 +391,5 @@ class Editor
             }
         }
         return sb.ToString();
-
-
     }
 }
