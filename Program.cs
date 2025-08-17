@@ -13,7 +13,7 @@ class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
         Console.TreatControlCAsInput = true;
-        Console.CursorVisible = true;
+        Console.CursorVisible = false;
 
         var editor = new Editor();
         editor.Run();
@@ -37,11 +37,10 @@ class Editor
             var key = Console.ReadKey(intercept: true);
 
             if (HandleGlobalCommands(key))
-            {
                 continue;
-
-                HandleEditing(key);
-            }
+            
+            HandleEditing(key);
+            
         }
     }
 
@@ -54,7 +53,6 @@ class Editor
                 case ConsoleKey.S:
                     Save();
                     return true;
-
                 case ConsoleKey.O:
                     Open();
                     return true;
@@ -86,12 +84,12 @@ class Editor
             if (line.Length > width) line = line.Substring(0, width);
             Console.SetCursorPosition(0, row);
             if (lineIndex < width)
-                Console.WriteLine(line + new string(' ', width - line.Length));
+                Console.Write(line + new string(' ', width - line.Length));
             else
-                Console.WriteLine(line);
+                Console.Write(line);
         }
         // Draw status bar
-        Console.BackgroundColor = ConsoleColor.Green;
+        Console.BackgroundColor = ConsoleColor.DarkGray;
         Console.ForegroundColor = ConsoleColor.Black;
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
         string name = _filePath is null ? "untitled" : Path.GetFileName(_filePath);
@@ -163,7 +161,7 @@ class Editor
     }
     private string CurrentLine() => _lines[_cursorY];
 
-    private void SetCurrentLine(string line)
+    private void SetCurrentLine(string value)
     {
         _lines[_cursorY] = value;
         _dirty = true;
@@ -271,8 +269,8 @@ class Editor
     private bool ConfirmQuit()
     {
         if (!_dirty) return false;
-        var respone = Prompt("Unsaved changes.\nQuit without saving? (y/N): ");
-        return respone.Trim().Equals("y", StringComparison.OrdinalIgnoreCase);
+        var response = Prompt("Unsaved changes.\nQuit without saving? (y/N): ");
+        return response.Trim().Equals("y", StringComparison.OrdinalIgnoreCase);
     }
 
     private void Save()
