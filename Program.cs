@@ -143,7 +143,7 @@ class Editor
                 InsertNewLine();
                 break;
             case ConsoleKey.Backspace:
-                Delete();
+                Backspace();
                 break;
             case ConsoleKey.Delete:
                 Delete();
@@ -327,7 +327,7 @@ class Editor
         Render();
 
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
-        Console.BackgroundColor = ConsoleColor.DarkCyan;
+        Console.BackgroundColor = ConsoleColor.DarkBlue;
         Console.ForegroundColor = ConsoleColor.White;
         string padded = message;
         if (padded.Length < Console.WindowWidth)
@@ -370,7 +370,7 @@ class Editor
         var sb = new StringBuilder();
         while (true)
         {
-            var key = Console.ReadKey();
+            var key = Console.ReadKey(true);
             if (key.Key == ConsoleKey.Enter) break;
             if (key.Key == ConsoleKey.Escape) return null;
             if (key.Key == ConsoleKey.Backspace)
@@ -385,12 +385,13 @@ class Editor
                 }
                 continue;
             }
+            if (!char.IsControl(key.KeyChar) && sb.Length < maxLen)
+            {
+                sb.Append(key.KeyChar);
+                Console.Write(key.KeyChar);
+            }
+            return sb.ToString();
         }
-        if (!char.IsControl(key.KeyChar) && sb.Length < maxLen)
-        {
-            sb.Append(key.KeyChar);
-            Console.Write(key.KeyChar);
-        }
-        return sb.ToString();
+        
     }
 }
