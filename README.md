@@ -1,5 +1,7 @@
 # SharpEdit
 
+<img width="1437" height="880" alt="image" src="https://github.com/user-attachments/assets/584f9d35-3702-4c8b-9aa4-dcbaf7c16a37" />
+
 SharpEdit is a terminal-based text editor written in C#. It is designed to provide a fast, efficient, and user-friendly editing experience directly from the command line. This project has been inspired by Microsoft's open source repository [edit](https://github.com/microsoft/edit). Go check it out.
 
 ## Features
